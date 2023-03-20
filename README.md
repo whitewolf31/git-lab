@@ -205,7 +205,7 @@ ne permite sa modificam istoricul mai mult decat `--amend`: ne permite sa facem 
 Comanda mai asteapta si intervalul de commit-uri asupra carora se vor face modificarile.
 De obicei, acest interval este dat sub forma `@~N`, care inseamna "ultimele N commit-uri". 
 
-#### Reseting
+#### Reset
 
 Exista situatii cand este mai simplu sa fie refacut istoricul de commit-uri stergandu-le pe toate si rescriindu-le.
 Pentru asta se poate folosi
@@ -240,3 +240,16 @@ Pentru a reveni la starea de dinainte de `git bisect start`, se foloseste comand
 
 ## Exercitii:
 
+1. Faceti fork repository-ului, cu optiunea de a copia si branch-urile existente.
+Clonati repository-ul obtinut.
+Adaugati un remote `upstream` catre repository-ul original.
+2. Echipa a decis ca nu se vor mai adauga feature-uri in plus.
+Faceti schimbarea pe branch-ul `feature_branch_2`, pentru a fi la zi cu modificarile de pe branch-ul `feature_branch_1`.
+Pastrati linia cu "big boss". 
+Creati un pull-request, din interfata GitHub, catre branch-ul `feature_branch_1` din fork-ul vostru.
+Adaugati asistentul de la laborator ca reviewer.
+3. TODO: exercitiu cu amend
+4. TODO: exercitiu cu bisect
+5. TODO: exercitiu cu rebase interactiv + stash
+6. TODO: exercitiu cu reset soft
+7. TODO: exercitiu cu reset hard
