@@ -1,4 +1,4 @@
-# Laboratory 04: Git
+# Laboratorul 04: Git & Github
 
 ## Version Control
 
@@ -90,7 +90,7 @@ In cazul in care pe repository-ul local este activ un `branch`, comanda de mai s
 Exista situatii in care, fiind pe un branch copil, pornit dintr-un branch parinte (ex. `main`), dorim sa integram modificarile din parinte in branch-ul nostru.
 Aici intervine notiunea de `rebase`.
 
-TODO: diagrama branch-uri
+![](images/branches.png)
 
 ### Rebase
 
@@ -108,7 +108,7 @@ Pentru a aduce schimbarile din branch-ul `main` din `remote`-ul `origin`, comand
 $ git pull --rebase origin main
 ```
 
-TODO: diagrama dupa rebase
+![](images/branches-rebase.png)
 
 Dupa rebase, daca dorim sa trimitem modificarile catre remote, folosind comanda
 ```
@@ -157,26 +157,86 @@ De multe ori, o operatie de `rebase` sau de `stash pop` va duce la un `merge con
 Acesta apare deoarece ultimul commit, `HEAD`, si modificarile pe care vrem sa le aplicam difera, iar diferentele nu apar datorita modificarilor noastre (nu fac parte dintr-un `patch`).
 Pentru a intelege aceasta situatie, vom urmari un exemplu.
 
-TODO: diagrama exemplu conflict
+Repository-ul curent contine 2 branch-uri, `feature_branch_1` si `feature_branch_2`.
+Initial, pe `feature_branch_1` a fost adaugat fisierul `file.txt`.
+Branch-ul `feature_branch_2` a fost creat dupa adaugarea fisierului.
+Apoi, pe ambele branch-uri au fost facute modificari asupra fisierului.
 
-Repository-ul TODO contine fisierul TODO.
-In acest repository exista un branch-uri, TODO, pornit din `main`.
-Branch-ul TODO face modificari asupra fisierului TODO.
-In paralel, fisierul este modificat si pe `main`.
-Se doreste integrarea schimbarilor de pe branch-ul TODO pe `main`, prin operatia de `merge`.
-Git va observa ca modificarile facute pe `main` anterior nu se regasesc si pe branch-ul TODO, si va raporta un `merge conflict`.
+![](images/file_branch_1.png)
+![](images/file_branch_2.png)
 
-TODO rezolvarea conflictului
+Daca se decide integrarea schimbarilor de pe branch-ul 1 pe branch-ul 2, va aparea un merge conflict.
+Acesta va fi indicat de git, in fisierele in care se afla conflictele.
 
-### Cleaning the commit history
+![](images/conflict.png)
+
+Pentru a rezolva un conflict, trebuie urmati urmatorii pasi:
+1. Trebuie pastrate una dintre variante, sau ambele, si eliminate delimitatoarele `<<<<<<< HEAD`, `=======` si `>>>>>>> <sha>`, apoi salvat fisierul
+2. `$ git add <fisier>`
+3. `$ git rebase --continue`, daca merge conflict-ul a aparut in urma unui rebase, sau `git merge --continue`, in cazul unui merge.
+
+### Organizarea istoricului de commit-uri
+
+Cand se adauga un feature nou unui proiect, este bine ca istoricul de commit-uri sa explice schimbarile aduse.
+In practica, multi utilizatori realizeaza commit-uri de tipul "Am rezolvat un bug", "Am mai rezolvat un bug".
+Commit-urile sub forma asta sunt bune pe procesul de dezvoltare, dar nu si in momentul cand feature-ul este integrat in proiectul mare.
+Se prefera urmatoarea forma a commit-urilor: `[componenta majora]: Functionalitate adaugata`.
+Orice rezolvare de bug, coding-style sau alte modificari, care fac parte din noua functionalitate, trebuie integrate intr-un singur commit.
+Asta nu inseamna ca trebuie facut commitn doar cand totul merge.
+Git pune la dispozitie unelte pentru a reface istoricul de commit-uri.
+
+#### Amend
+
+Comanda
+```
+$ git commit --amend
+```
+modifica ultimul commit, prin modificarea mesajului commit-ului, sau a schimbarilor din el.
+Problema cu aceasta comanda este ca in istoric vor aparea atat commit-ul vechi, cat si cel modificat cu `--amend`.
+De aceea, e necesara folosirea lui `$ git push --force`.
+
+#### Rebase interactiv
+
+Comanda
+```
+$ git rebase -i
+```
+ne permite sa modificam istoricul mai mult decat `--amend`: ne permite sa facem amend, sa imbinam commit-uri (`squash`), sa stergem commit-uri, sau chiar sa le modificam ordinea.
+Comanda mai asteapta si intervalul de commit-uri asupra carora se vor face modificarile.
+De obicei, acest interval este dat sub forma `@~N`, care inseamna "ultimele N commit-uri". 
 
 #### Reseting
 
-#### Interactive rebase
-
-#### Ammending
+Exista situatii cand este mai simplu sa fie refacut istoricul de commit-uri stergandu-le pe toate si rescriindu-le.
+Pentru asta se poate folosi
+```
+$ git reset <interval>
+```
+Aceasta comanda sterge commit-urile, dar pastreaza modificarile aduse de acele commit-uri.
+Exista varianta
+```
+$ git reset --hard <interval>
+```
+care sterge si modificarile aduse fisierelor.
 
 ### Bisect
+
+Uneori (de cele mai multe ori) proiectele vor avea bug-uri.
+De cele mai multe ori, vom scrie mult cod, multe commit-uri, apoi vom testa ce am scris.
+Problema apare cand s-au facut modificari substantiale, si e nevoie sa fie gasit un bug.
+In situatiile in care nu se poate observa citind codul, e nevoie sa trecem prin tot istoricul de commit-uri, unul cate unul, sa vedem unde a aparut problema.
+Git pune la dispozitie o unealta pentru a simplifica procesul: `git bisect`.
+Aceasta comanda face o cautare binara interval de commit-uri definit de utilizator, cautand primul commit "rau".
+
+Pentru a folosi `git bisect`, trebuie urmati urmatorii pasi:
+1. `$ git bisect start`
+2. `$ git bisect bad` 
+3. `$ git checkout <sha_ultimul_commit_bun>`
+4. `$ git bisect good`
+
+Dupa aceste comenzi, git va trece prin fiecare commit si va astepta sa fie marcat ca `good` sau `bad`, pana va gasi primul commit `bad` din istoric.
+
+Pentru a reveni la starea de dinainte de `git bisect start`, se foloseste comanda `git bisect reset`.
 
 ## Exercitii:
 
