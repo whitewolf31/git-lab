@@ -264,3 +264,7 @@ Adaugati un commit care rezolva problema, pe branch-ul `bisect_branch`.
 7. Manager-ul intern-ului tocmai a zis ce task avea de fapt de facut: sa genereze un numar random in 5 moduri diferite.
 Folosind `git reset --hard` Eliminati toate modificarile de pe branch-ul `reset_hard_branch`, si implementati ce i s-a cerut de fapt.
 (E o mica provocare sa gasiti a 5-a metoda - nu citire din `/dev/random` sau `rdseed`).
+
+## Feedback
+
+Daca ceva nu a mers, sau ati mai fi dorit sa fie si alte chestii in acest laborator, adaugati un issue.
